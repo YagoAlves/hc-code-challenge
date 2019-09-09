@@ -1,0 +1,148 @@
+<html ng-app="report">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body ng-controller="reportCtrl">
+
+    <div class="jumbotron">
+        <select class="form-control" ng-model="selectedUser" ng-options="user.first_name for user in users">
+            <option value=""> Filter by Users </option>
+        </select>
+    </div>
+
+    <!-- filter : {authors : selectedUser}
+    filter:(!!locationFilter || undefined) && {location: locationFilter} -->
+    <div class="card ">
+        <div ng-repeat="report in reports | filter:(!!selectedUser || undefined) && {authors: selectedUser} "
+            class="card-body">
+            <div class="container">
+                <div class="row h-100 justify-content-center align-items-center" >
+                    <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">{{report.authors.email}}</h4>
+                                <h6 class="card-subtitle mb-2 text-muted"> {{report.authors.first_name}}</h6>
+                                <p class="card-text">{{report.message}} </p>
+                                <button ng-click="openModal(report)" type="button" class="btn btn-primary"
+                                    data-toggle="modal" data-target=".bd-example-modal-xl"> Read more </button>
+
+                                <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+                                    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="container">
+
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Report
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-4">
+                                                                    <div class="list-group" id="list-tab"
+                                                                        role="tablist">
+                                                                        <a class="list-group-item list-group-item-action active"
+                                                                            id="list-prince-list" data-toggle="list"
+                                                                            href="#list-prince" role="tab"
+                                                                            aria-controls="prince">Message</a>
+                                                                        <a class="list-group-item list-group-item-action"
+                                                                            id="list-wild-list" data-toggle="list"
+                                                                            href="#list-wild" role="tab"
+                                                                            aria-controls="wild">Reply </a>
+                                                                        <a class="list-group-item list-group-item-action"
+                                                                            id="list-solitude-list" data-toggle="list"
+                                                                            href="#list-solitude" role="tab"
+                                                                            aria-controls="messages"> Supervisors </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="tab-content" id="nav-tabContent">
+                                                                        <div class="tab-pane active" id="list-prince"
+                                                                            role="tabpanel"
+                                                                            aria-labelledby="list-prince-list">
+                                                                            <h1> {{modalData.authors.first_name}}  {{modalData.authors.last_name}}</h1>
+                                                                            <p> </p>
+                                                                            <dl>
+                                                                                <dt> Message </dt>
+                                                                                <dd> {{modalData.message}} </dd>
+                                                                                <dt> Contact : </dt>
+                                                                                <dd> {{modalData.authors.email }} </dd>
+                                                                            </dl>
+                                                                            
+                                                                        </div>
+                                                                        <div
+                                                                            class="tab-pane" id="list-wild"
+                                                                            role="tabpanel"
+                                                                            aria-labelledby="list-wild-list">
+                                                                            <div ng-repeat="r in modalData.reports_set track by $index">
+                                                                                <h1> {{r.author.first_name}}
+                                                                                    {{r.author.last_name}}</h1>
+                                                                                <p> </p>
+                                                                                <dl>
+                                                                                    <dt> Reply </dt>
+                                                                                    <dd> {{r.message}} </dd>
+                                                                                    <dt> Contact : </dt>
+                                                                                    <dd> {{r.author.email}} </dd>
+                                                                                </dl>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div
+                                                                            class="tab-pane" id="list-solitude"
+                                                                            role="tabpanel"
+                                                                            aria-labelledby="list-solitude-list">
+                                                                            <div ng-repeat="s in modalData.supervisors track by $index">
+                                                                                    <h1> {{s.first_name}}
+                                                                                        {{s.last_name}}</h1>
+                                                                                    <p> </p>
+                                                                                    <dl>
+                                                                                        <dt> Contact : </dt>
+                                                                                        <dd> {{s.email}} </dd>
+                                                                                    </dl>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        Version 1.0
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-messages.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller/reportController.js"></script>
+</body>
+
+</html>
