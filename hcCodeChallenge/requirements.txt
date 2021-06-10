@@ -10,7 +10,7 @@ configparser==3.7.4
 cryptography==2.1.4
 cycler==0.10.0
 decorator==4.3.0
-Django==1.11.24
+Django==2.2.24
 django-cors-headers==3.0.2
 djangorestframework==3.9.4
 entrypoints==0.2.3
